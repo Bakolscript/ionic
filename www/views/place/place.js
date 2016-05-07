@@ -3,23 +3,19 @@ angular.module('App')
   $stateProvider.state('place', {
     url: '/places/:place_id',
     controller: 'PlaceController as vm',
-    templateUrl: 'views/place/place.html',
-    resolve: {
-      Place: function($http, $stateParams) {
-        var url = 'https://civinfo-apis.herokuapp.com/civic/place?place_id=' + $stateParams.place_id;
-        return $http.get(url);
-      }
-    }
+    templateUrl: 'views/place/place.html'
   });
 })
-.controller('PlaceController', function($scope, $ionicLoading, $ionicActionSheet, Place) {
+.controller('PlaceController', function($scope, $ionicLoading, $ionicActionSheet, $http, $stateParams) {
   var vm = this;
 
-  $scope.$on('$ionicView.afterEnter', function() {
+  $ionicLoading.show();
+
+  var url = 'https://civinfo-apis.herokuapp.com/civic/place?place_id=' + $stateParams.place_id;
+  $http.get(url).then(function(response) {
+    vm.place = response.data.result;
     $ionicLoading.hide();
   });
-
-  vm.place = Place.data.result;
 
   vm.openSheet = function() {
     var sheet = $ionicActionSheet.show({

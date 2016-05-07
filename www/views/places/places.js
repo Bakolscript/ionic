@@ -33,7 +33,4 @@ angular.module('App')
     });
   };
 
-  $scope.$on('$ionicView.beforeLeave', function() {
-    $ionicLoading.show();
-  });
 });
