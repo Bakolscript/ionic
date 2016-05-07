@@ -24,6 +24,15 @@ angular.module('App', ['ionic'])
   };
 })
 
+.factory('Types', function() {
+  return [
+    {type: 'Park', enabled: true},
+    {type: 'Hospital', enabled: true},
+    {type: 'Library', enabled: true},
+    {type: 'Museum', enabled: true}
+  ];
+})
+
 .config(function($urlRouterProvider) {
   $urlRouterProvider.otherwise('/places');
 })
