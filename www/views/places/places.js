@@ -6,17 +6,24 @@ angular.module('App')
     templateUrl: 'views/places/places.html'
   });
 })
-.controller('PlacesController', function($http, $scope, $ionicLoading, Geolocation) {
+.controller('PlacesController', function($http, $scope, $ionicLoading, $ionicHistory, Geolocation, Types) {
   var vm = this;
-  var base = 'https://civinfo-apis.herokuapp.com/civic/places?type=park&location=' + Geolocation.geometry.location.lat + ',' + Geolocation.geometry.location.lng;
+  var base = 'https://civinfo-apis.herokuapp.com/civic/places?location=' + Geolocation.geometry.location.lat + ',' + Geolocation.geometry.location.lng;
   var token = '';
   vm.canLoad = true;
   vm.places = [];
 
-  $ionicLoading.show();
-
   vm.load = function load() {
+    $ionicLoading.show();
     var url = base;
+    var query = [];
+    angular.forEach(Types, function(type) {
+      if (type.enabled === true) {
+        query.push(type.type.toLowerCase());
+      }
+    });
+    url += '&query=' + query.join('|');
+
     if (token) {
       url += '&token=' + token;
     }
@@ -33,4 +40,13 @@ angular.module('App')
     });
   };
 
+  $scope.$on('$ionicView.beforeEnter', function() {
+    var previous = $ionicHistory.forwardView();
+    if (!previous || previous.stateName != 'place') {
+      token = '';
+      vm.canLoad = false;
+      vm.places = [];
+      vm.load();
+    }
+  });
 });

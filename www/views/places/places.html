@@ -1,4 +1,4 @@
-<ion-view view-title="Local Parks" hide-back-button="true">
+<ion-view view-title="Local Places" hide-back-button="true">
   <ion-content>
     <ion-list>
       <ion-item ng-repeat="place in vm.places" class="item-avatar" ui-sref="place({place_id: place.place_id})">
@@ -7,6 +7,6 @@
         <p>{{place.formatted_address}}</p>
       </ion-item>
     </ion-list>
-    <ion-infinite-scroll on-infinite="vm.load()" ng-if="vm.canLoad"></ion-infinite-scroll>
+    <ion-infinite-scroll on-infinite="vm.load()" ng-if="vm.canLoad" immediate-check="false"></ion-infinite-scroll>
   </ion-content>
 </ion-view>
